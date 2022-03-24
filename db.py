@@ -164,7 +164,7 @@ while True:
 	con = sqlite3.connect(DATABASE)
 	cursor = con.cursor()
 	
-	tabell = input("Vil du fylle tabellene eller tømme de (t/f): ")
+	tabell = input("Vil du fylle tabellene eller tømme de (t/f/ ): ")
 	
 	if tabell == "f":
 		fill_database()

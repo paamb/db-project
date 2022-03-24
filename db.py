@@ -79,6 +79,8 @@ cursor.execute('''INSERT OR IGNORE INTO Kaffe VALUES (3, 'Sommerkaffe 2021', 'Kj
 cursor.execute('''INSERT OR IGNORE INTO Kaffe VALUES (4, 'Sommerkaffe 2022', 'Kjempeflott floral i smaken', 200 , '2021-02-02', 'lys', 1, 2)''')
 cursor.execute('''INSERT OR IGNORE INTO Kaffe VALUES (5, 'Sommerkaffe 2023', 'Kjempeflott', 200 , '2021-02-02', 'lys', 1, 2)''')
 
+con.commit()
+con.close()
 
 # Brukerhistorie 2
 def brukerhistorie_2():
@@ -90,58 +92,81 @@ def brukerhistorie_2():
 	Group by fulltNavn
 	Order by smakstester desc''')
 
-	brukerhistorie_to = cursor.fetchall()
-	print(brukerhistorie_to)
+	brukerhistorie_2_output = cursor.fetchall()
+	print(brukerhistorie_2_output)
 
 # Brukerhistorie 4
-def brukerhistorie_4():
-	cursor.execute('''SELECT Kaffebrenneri.navn as brennerinavn, Kaffe.navn as kaffenavn, Kaffe.id
+def brukerhistorie_4(filter):
+	cursor.execute(f'''SELECT Kaffebrenneri.navn as brennerinavn, Kaffe.navn as kaffenavn, Kaffe.id
 	FROM Kaffe INNER JOIN Kaffebrenneri on(Kaffe.brenneriId = Kaffebrenneri.id)
-	WHERE Kaffe.beskrivelse like "%floral%"
+	WHERE Kaffe.beskrivelse like ( ? )
 	UNION
 	SELECT Kaffebrenneri.navn as brennrinavn, Kaffe.navn as kaffenavn, Kaffe.id
 	FROM Kaffesmaking INNER JOIN Kaffe on (Kaffesmaking.kaffeId = Kaffe.id) INNER JOIN Kaffebrenneri on (Kaffebrenneri.id = Kaffe.brenneriId)
-	WHERE Kaffesmaking.smaksnotat like "%floral%"''')
+	WHERE Kaffesmaking.smaksnotat like ( ? )''', [filter, filter])
 
-	brukerhistorie_fire = cursor.fetchall()
-	print(brukerhistorie_fire)
+	brukerhistorie_4_output= cursor.fetchall()
+	print(brukerhistorie_4_output)
 
 
 # Brukerhistorie 5
-def brukerhistorie_5():
-	cursor.execute('''SELECT  Kaffebrenneri.navn AS "brenninavn", Kaffe.navn AS "kaffenavn"
+def brukerhistorie_5(filter, nasjoner):
+
+	brukerhistorie_input = [filter] + nasjoner
+	# print(nasjoner)
+	# Denne bruker f string men tror at ? gjør at det går fint
+	# https://stackoverflow.com/questions/283645/python-list-in-sql-query-as-parameter
+	cursor.execute(f'''SELECT  Kaffebrenneri.navn AS "brenninavn", Kaffe.navn AS "kaffenavn"
 	FROM Bonneparti INNER JOIN
 	(SELECT *
 	FROM Foredlingsmetode
 	WHERE Foredlingsmetode.id NOT IN(SELECT Foredlingsmetode.id
 		FROM Foredlingsmetode
-		WHERE Foredlingsmetode.navn like "%Vasket%"
+		WHERE Foredlingsmetode.navn like ( ? )
 		)) FiltrertForedlingsmetode
 	ON (FiltrertForedlingsmetode.id = Bonneparti.foredlingsmetodeId)
 	INNER JOIN Gard on (Gard.id = Bonneparti.gardId)
 	INNER JOIN Kaffe on (Kaffe.partiId = Bonneparti.id)
 	INNER JOIN Kaffebrenneri on (Kaffe.brenneriId = Kaffebrenneri.id)
-	WHERE Gard.land = "Rwanda" or Gard.land = "Colombia"
-	''')
+	WHERE Gard.land IN ({','.join('?' for _ in brukerhistori_input[1::])})
+	''', (brukerhistorie_input))
+	brukerhistorie_5_output = cursor.fetchall()
+	print(brukerhistorie_5_output)
 
 while True:
-	brukerhistorie = int(input("Hvilken brukerhistorie vil du utføre? (1,2,3,4,5)"))
-	if brukerhistorie == "1":
-		brukerhistorie_1()
-	elif brukerhistorie == "2":
+	con = sqlite3.connect("prosjekt_db_innlevinger1.db")
+	cursor = con.cursor()
+	brukerhistorie = int(input("Hvilken brukerhistorie vil du utføre? (1,2,3,4,5): "))
+	
+	if brukerhistorie == 1:
+		pass
+
+	elif brukerhistorie == 2:
 		brukerhistorie_2()
-	elif brukerhistorie == "3":
+
+	elif brukerhistorie == 3:
 		brukerhistorie_3()
-	elif brukerhistorie == "4":
-		brukerhistorie_4()
-	elif brukerhistorie == "5":
-		brukerhistorie_5()
+
+	elif brukerhistorie == 4:
+		filter = input("Hvilket ord vil du filtrere på? (floral): ")
+		filter = "%" + filter + "%"
+		brukerhistorie_4(filter)
+		
+	elif brukerhistorie == 5:
+		print("Skriv inn nasjonene du vil finne kaffe fra. Skriv mellomrom mellom hvert land (Colombia Nigeria Peru): ", end="")
+		nasjoner = [str(nasjon) for nasjon in input().split()]
+		filter = input("Hvilken foredlingsmetode vil du \x1B[3mIKKE\x1B[0m se: ")
+		filter = "%" + filter + "%"
+		brukerhistori_input = [filter] + nasjoner
+		brukerhistorie_5(filter, nasjoner)
 	else:
 		print("Ugyldig input. Skriv inn et tall mellom 1 og 5")
+	con.commit()
+	# Close connection
+	con.close()
+	#Commiter endringer til databasen
+
 	
 
 
-#Commiter endringer til databasen
-con.commit()
-# Close connection
-con.close()
+

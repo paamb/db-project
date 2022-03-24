@@ -111,29 +111,28 @@ def brukerhistorie_1(bruker):
 
 # Brukerhistorie 2
 def brukerhistorie_2():
-	cursor.execute('''SELECT fulltNavn, count(*) as smakstester
+	for row in cursor.execute('''SELECT fulltNavn, count(*) as smakstester
 	FROM (
 	SELECT DISTINCT fulltNavn, kaffeId 
 	FROM Bruker INNER JOIN Kaffesmaking ON Bruker.id = Kaffesmaking.brukerId
 	)
 	Group by fulltNavn
-	Order by smakstester desc''')
-
-	brukerhistorie_2_output = cursor.fetchall()
-	print(brukerhistorie_2_output)
+	Order by smakstester desc'''):
+		print(row)
 
 # Brukerhistorie 4
 def brukerhistorie_4(filter):
-	cursor.execute(f'''SELECT Kaffebrenneri.navn as brennerinavn, Kaffe.navn as kaffenavn, Kaffe.id
+	for row in cursor.execute(f'''SELECT Kaffebrenneri.navn as brennerinavn, Kaffe.navn as kaffenavn, Kaffe.id
 	FROM Kaffe INNER JOIN Kaffebrenneri on(Kaffe.brenneriId = Kaffebrenneri.id)
 	WHERE Kaffe.beskrivelse like ( ? )
 	UNION
 	SELECT Kaffebrenneri.navn as brennrinavn, Kaffe.navn as kaffenavn, Kaffe.id
 	FROM Kaffesmaking INNER JOIN Kaffe on (Kaffesmaking.kaffeId = Kaffe.id) INNER JOIN Kaffebrenneri on (Kaffebrenneri.id = Kaffe.brenneriId)
-	WHERE Kaffesmaking.smaksnotat like ( ? )''', [filter, filter])
+	WHERE Kaffesmaking.smaksnotat like ( ? )''', [filter, filter]):
+		print(row)
 
-	brukerhistorie_4_output= cursor.fetchall()
-	print(brukerhistorie_4_output)
+	# brukerhistorie_4_output= cursor.fetchall()
+	# print(brukerhistorie_4_output)
 
 
 # Brukerhistorie 5
@@ -143,7 +142,7 @@ def brukerhistorie_5(filter, nasjoner):
 	# print(nasjoner)
 	# Denne bruker f string men tror at ? gjør at det går fint
 	# https://stackoverflow.com/questions/283645/python-list-in-sql-query-as-parameter
-	cursor.execute(f'''SELECT  Kaffebrenneri.navn AS "brenninavn", Kaffe.navn AS "kaffenavn"
+	for row in cursor.execute(f'''SELECT  Kaffebrenneri.navn AS "brenninavn", Kaffe.navn AS "kaffenavn"
 	FROM Bonneparti INNER JOIN
 	(SELECT *
 	FROM Foredlingsmetode
@@ -155,10 +154,9 @@ def brukerhistorie_5(filter, nasjoner):
 	INNER JOIN Gard on (Gard.id = Bonneparti.gardId)
 	INNER JOIN Kaffe on (Kaffe.partiId = Bonneparti.id)
 	INNER JOIN Kaffebrenneri on (Kaffe.brenneriId = Kaffebrenneri.id)
-	WHERE Gard.land IN ({','.join('?' for _ in brukerhistori_input[1::])})
-	''', (brukerhistorie_input))
-	brukerhistorie_5_output = cursor.fetchall()
-	print(brukerhistorie_5_output)
+	WHERE Gard.land IN ({','.join('?' for _ in brukerhistorie_input[1::])})
+	''', (brukerhistorie_input)):
+		print(row)
 
 while True:
 	fill_tables()
@@ -195,6 +193,6 @@ while True:
 	# Close connection
 	con.close()
 	#Commiter endringer til databasen
-
+	clean_database()
 
 

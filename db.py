@@ -24,6 +24,7 @@ con = sqlite3.connect("prosjekt_db_innlevinger1.db")
 
 cursor = con.cursor()
 #INSERT OR IGNORE legger til rad i databasen bare hvis den ikke finnes fra før.
+
 cursor.execute('''INSERT OR IGNORE INTO Bonneparti VALUES (1, 2021, 8, 1, 1)''')
 cursor.execute('''INSERT OR IGNORE INTO Bonneparti VALUES (2, 2022, 10, 2, 5)''')
 cursor.execute('''INSERT OR IGNORE INTO Bonneparti VALUES (4, 2022, 10, 3, 3)''')
@@ -45,7 +46,7 @@ cursor.execute('''INSERT OR IGNORE INTO Bruker VALUES (3, 'odd@epost.no', 'super
 cursor.execute('''INSERT OR IGNORE INTO Foredlingsmetode VALUES (1, 'bourbon', 'Bærtørket')''')
 cursor.execute('''INSERT OR IGNORE INTO Foredlingsmetode VALUES (2, 'magnifique', 'Vasket')''')
 cursor.execute('''INSERT OR IGNORE INTO Foredlingsmetode VALUES (3, 'belle', 'Vasket')''')
-cursor.execute('''INSERT OR IGNORE INTO Foredlingsmetode VALUES (4, 'Bærtørket', 'Naar man bærtørker saa faar kaffen en helt spessiel arooma')''')
+cursor.execute('''INSERT OR IGNORE INTO Foredlingsmetode VALUES (4, 'Bærtørket', 'Naar man bærtørker saa faar kaffen en helt spesiell aroma')''')
 cursor.execute('''INSERT OR IGNORE INTO Foredlingsmetode VALUES (5, 'Vasket', 'Denne kan gjøre at bønnen kan føles litt kjedelig ut')''')
 
 
@@ -79,44 +80,65 @@ cursor.execute('''INSERT OR IGNORE INTO Kaffe VALUES (5, 'Sommerkaffe 2023', 'Kj
 
 
 # Brukerhistorie 2
-cursor.execute('''SELECT fulltNavn, count(*) as smakstester
-FROM (
-SELECT DISTINCT fulltNavn, kaffeId 
-FROM Bruker INNER JOIN Kaffesmaking ON Bruker.id = Kaffesmaking.brukerId
-)
-Group by fulltNavn
-Order by smakstester desc''')
+def brukerhistorie_2():
+	cursor.execute('''SELECT fulltNavn, count(*) as smakstester
+	FROM (
+	SELECT DISTINCT fulltNavn, kaffeId 
+	FROM Bruker INNER JOIN Kaffesmaking ON Bruker.id = Kaffesmaking.brukerId
+	)
+	Group by fulltNavn
+	Order by smakstester desc''')
 
-brukerhistorie_to = cursor.fetchall()
-print(brukerhistorie_to)
+	brukerhistorie_to = cursor.fetchall()
+	print(brukerhistorie_to)
 
 # Brukerhistorie 4
-cursor.execute('''SELECT Kaffebrenneri.navn as brennerinavn, Kaffe.navn as kaffenavn, Kaffe.id
-FROM Kaffe INNER JOIN Kaffebrenneri on(Kaffe.brenneriId = Kaffebrenneri.id)
-WHERE Kaffe.beskrivelse like "%floral%"
-UNION
-SELECT Kaffebrenneri.navn as brennrinavn, Kaffe.navn as kaffenavn, Kaffe.id
-FROM Kaffesmaking INNER JOIN Kaffe on (Kaffesmaking.kaffeId = Kaffe.id) INNER JOIN Kaffebrenneri on (Kaffebrenneri.id = Kaffe.brenneriId)
-WHERE Kaffesmaking.smaksnotat like "%floral%"''')
+def brukerhistorie_4():
+	cursor.execute('''SELECT Kaffebrenneri.navn as brennerinavn, Kaffe.navn as kaffenavn, Kaffe.id
+	FROM Kaffe INNER JOIN Kaffebrenneri on(Kaffe.brenneriId = Kaffebrenneri.id)
+	WHERE Kaffe.beskrivelse like "%floral%"
+	UNION
+	SELECT Kaffebrenneri.navn as brennrinavn, Kaffe.navn as kaffenavn, Kaffe.id
+	FROM Kaffesmaking INNER JOIN Kaffe on (Kaffesmaking.kaffeId = Kaffe.id) INNER JOIN Kaffebrenneri on (Kaffebrenneri.id = Kaffe.brenneriId)
+	WHERE Kaffesmaking.smaksnotat like "%floral%"''')
 
-brukerhistorie_fire = cursor.fetchall()
-print(brukerhistorie_fire)
+	brukerhistorie_fire = cursor.fetchall()
+	print(brukerhistorie_fire)
+
 
 # Brukerhistorie 5
-cursor.execute('''SELECT  Kaffebrenneri.navn AS "brenninavn", Kaffe.navn AS "kaffenavn"
-FROM Bonneparti INNER JOIN
-(SELECT *
-FROM Foredlingsmetode
-WHERE Foredlingsmetode.id NOT IN(SELECT Foredlingsmetode.id
+def brukerhistorie_5():
+	cursor.execute('''SELECT  Kaffebrenneri.navn AS "brenninavn", Kaffe.navn AS "kaffenavn"
+	FROM Bonneparti INNER JOIN
+	(SELECT *
 	FROM Foredlingsmetode
-	WHERE Foredlingsmetode.navn like "%Vasket%"
-	)) FiltrertForedlingsmetode
-ON (FiltrertForedlingsmetode.id = Bonneparti.foredlingsmetodeId)
-INNER JOIN Gard on (Gard.id = Bonneparti.gardId)
-INNER JOIN Kaffe on (Kaffe.partiId = Bonneparti.id)
-INNER JOIN Kaffebrenneri on (Kaffe.brenneriId = Kaffebrenneri.id)
-WHERE Gard.land = "Rwanda" or Gard.land = "Colombia"
-''')
+	WHERE Foredlingsmetode.id NOT IN(SELECT Foredlingsmetode.id
+		FROM Foredlingsmetode
+		WHERE Foredlingsmetode.navn like "%Vasket%"
+		)) FiltrertForedlingsmetode
+	ON (FiltrertForedlingsmetode.id = Bonneparti.foredlingsmetodeId)
+	INNER JOIN Gard on (Gard.id = Bonneparti.gardId)
+	INNER JOIN Kaffe on (Kaffe.partiId = Bonneparti.id)
+	INNER JOIN Kaffebrenneri on (Kaffe.brenneriId = Kaffebrenneri.id)
+	WHERE Gard.land = "Rwanda" or Gard.land = "Colombia"
+	''')
+
+while True:
+	brukerhistorie = int(input("Hvilken brukerhistorie vil du utføre? (1,2,3,4,5)"))
+	if brukerhistorie == "1":
+		brukerhistorie_1()
+	elif brukerhistorie == "2":
+		brukerhistorie_2()
+	elif brukerhistorie == "3":
+		brukerhistorie_3()
+	elif brukerhistorie == "4":
+		brukerhistorie_4()
+	elif brukerhistorie == "5":
+		brukerhistorie_5()
+	else:
+		print("Ugyldig input. Skriv inn et tall mellom 1 og 5")
+	
+
 
 #Commiter endringer til databasen
 con.commit()

@@ -1,23 +1,6 @@
 import sqlite3
 
-con = sqlite3.connect("prosjekt_db_innlevinger1.db")
-
-
-
-cursor = con.cursor()
-
-cursor.execute('DELETE FROM BonneFraGard;',)
-cursor.execute('DELETE FROM Bonneparti;',)
-cursor.execute('DELETE FROM Bruker;',)
-cursor.execute('DELETE FROM Foredlingsmetode;',)
-cursor.execute('DELETE FROM Gard;',)
-cursor.execute('DELETE FROM Kaffebonne;',)
-cursor.execute('DELETE FROM Kaffebrenneri;',)
-cursor.execute('DELETE FROM Kaffesmaking;',)
-cursor.execute('DELETE FROM Kaffe;',)
-
-con.commit()
-con.close()
+clean_database()
 
 
 con = sqlite3.connect("prosjekt_db_innlevinger1.db")
@@ -118,7 +101,52 @@ INNER JOIN Kaffebrenneri on (Kaffe.brenneriId = Kaffebrenneri.id)
 WHERE Gard.land = "Rwanda" or Gard.land = "Colombia"
 ''')
 
-#Commiter endringer til databasen
+# Commiter endringer til databasen
 con.commit()
 # Close connection
 con.close()
+
+
+def brukerhistorie_1(bruker):
+	clean_database()
+	print("Du er logget inn som: " + bruker + "\nLegg til et smaksnotat! \n")
+	brenneri = input("Brenneri: ")
+	kaffenavn = input("Kaffenavn: ")
+	poeng = input("Poeng (0-10): ")
+	smaksnotat = input("Smaksnotat: ")
+
+	con = sqlite3.connect("prosjekt_db_innlevinger1.db")
+	cursor = con.cursor()
+
+	#Oppretter gård og kaffebønn
+	cursor.execute('''INSERT OR IGNORE INTO Gard VALUES (1, 'Nombre de Dios', '1500', 'Colombia', 'Santa Ana')''')
+	cursor.execute('''INSERT OR IGNORE INTO Kaffebonne VALUES (1, 'Bourbon', 'caffea arabica')''')
+	cursor.execute('''INSERT OR IGNORE INTO BonneFraGard VALUES (1, 1)''')
+
+	#Lager foredingsmetode og kaffebønne
+	cursor.execute('''INSERT OR IGNORE INTO Foredlingsmetode VALUES (1, 'Bærtørket', 'Disse bønnene er bærtørket.')''')
+	cursor.execute('''INSERT OR IGNORE INTO Bonneparti VALUES (1, 2022, 8, 1, 1)''')
+	cursor.execute('''INSERT OR IGNORE INTO BonnerIParti VALUES (1, 1)''')
+
+	#Lager kaffebrenneri og kaffe
+	cursor.execute('''INSERT OR IGNORE INTO Kaffebrenneri VALUES (1, 'Jacobsen & Svart')''')
+	cursor.execute('''INSERT OR IGNORE INTO Kaffe VALUES (1, 'Vinterkaffe 2022', 'Ingen beskrivelse', 600 , '2022-20-01', 'lys', 1, 1)''')
+
+
+
+def clean_database():
+	con = sqlite3.connect("prosjekt_db_innlevinger1.db")
+	cursor = con.cursor()
+
+	cursor.execute('DELETE FROM BonneFraGard;',)
+	cursor.execute('DELETE FROM Bonneparti;',)
+	cursor.execute('DELETE FROM Bruker;',)
+	cursor.execute('DELETE FROM Foredlingsmetode;',)
+	cursor.execute('DELETE FROM Gard;',)
+	cursor.execute('DELETE FROM Kaffebonne;',)
+	cursor.execute('DELETE FROM Kaffebrenneri;',)
+	cursor.execute('DELETE FROM Kaffesmaking;',)
+	cursor.execute('DELETE FROM Kaffe;',)
+
+	con.commit()
+	con.close()

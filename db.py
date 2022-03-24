@@ -1,6 +1,6 @@
 import sqlite3
 
-DATABASE = "prosjekt_db_innlevinger1.db"
+DATABASE = "prosjekt_db_innlevering1.db"
 
 def clean_database():
 	con = sqlite3.connect(DATABASE)
@@ -19,7 +19,7 @@ def clean_database():
 	con.commit()
 	con.close()
 
-def fill_tables():
+def fill_database():
 	con = sqlite3.connect(DATABASE)
 
 	cursor = con.cursor()
@@ -158,10 +158,20 @@ def brukerhistorie_5(filter, nasjoner):
 	''', (brukerhistorie_input)):
 		print(row)
 
+
+
 while True:
-	fill_tables()
 	con = sqlite3.connect(DATABASE)
 	cursor = con.cursor()
+	
+	tabell = input("Vil du fylle tabellene eller tømme de (t/f): ")
+	
+	if tabell == "f":
+		fill_database()
+	elif tabell == "t":
+		clean_database()
+
+
 	brukerhistorie = int(input("Hvilken brukerhistorie vil du utføre? (1,2,3,4,5): "))
 	
 	if brukerhistorie == 1:
@@ -187,6 +197,8 @@ while True:
 		filter = "%" + filter + "%"
 		brukerhistori_input = [filter] + nasjoner
 		brukerhistorie_5(filter, nasjoner)
+	elif brukerhistorie == 10:
+		clean_database()
 	else:
 		print("Ugyldig input. Skriv inn et tall mellom 1 og 5")
 	con.commit()

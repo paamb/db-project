@@ -74,6 +74,10 @@ def fill_database():
 	cursor.execute('''INSERT OR IGNORE INTO Kaffe VALUES (3, 'Sommerkaffe 2021', 'Kjempeflott', 200 , '2021-02-02', 'lys', 1, 2)''')
 	cursor.execute('''INSERT OR IGNORE INTO Kaffe VALUES (4, 'Sommerkaffe 2022', 'Kjempeflott floral i smaken', 200 , '2021-02-02', 'lys', 1, 2)''')
 	cursor.execute('''INSERT OR IGNORE INTO Kaffe VALUES (5, 'Sommerkaffe 2023', 'Kjempeflott', 200 , '2021-02-02', 'lys', 1, 2)''')
+	cursor.execute('''INSERT OR IGNORE INTO Kaffe VALUES (6, 'Sommerkaffe 2024', 'Kjempeflott', 200 , '2021-02-02', 'lys', 1, 3)''')
+	cursor.execute('''INSERT OR IGNORE INTO Kaffe VALUES (7, 'Sommerkaffe 2025', 'Kjempeflott', 200 , '2021-02-02', 'lys', 1, 4)''')
+	cursor.execute('''INSERT OR IGNORE INTO Kaffe VALUES (8, 'Sommerkaffe 2026', 'Kjempeflott', 200 , '2021-02-02', 'lys', 1, 5)''')
+	cursor.execute('''INSERT OR IGNORE INTO Kaffe VALUES (9, 'Sommerkaffe 2027', 'Kjempeflott', 200 , '2021-02-02', 'lys', 1, 6)''')
 
 	con.commit()
 	con.close()
@@ -191,8 +195,8 @@ while True:
 		print("Skriv inn nasjonene du vil finne kaffe fra. Skriv mellomrom mellom hvert land (Colombia Nigeria Peru): ", end="")
 		nasjoner = [str(nasjon) for nasjon in input().split()]
 		filter = input("Hvilken foredlingsmetode vil du \x1B[3mIKKE\x1B[0m se: ")
-		filter = "%" + filter + "%"
-		brukerhistori_input = [filter] + nasjoner
+		#filter = "%" + filter + "%"
+		brukerhistorie_input = [filter] + nasjoner
 		brukerhistorie_5(filter, nasjoner)
 	elif brukerhistorie == 10:
 		clean_database()

@@ -30,45 +30,42 @@ def fill_database():
 	con = sqlite3.connect(DATABASE)
 
 	cursor = con.cursor()
-	#INSERT OR IGNORE legger til rad i databasen bare hvis den ikke finnes fra før.
 
 	cursor.execute('''INSERT OR IGNORE INTO Bonneparti VALUES (1, 2021, 8, 1, 1)''')
-	cursor.execute('''INSERT OR IGNORE INTO Bonneparti VALUES (2, 2022, 10, 2, 5)''')
-	cursor.execute('''INSERT OR IGNORE INTO Bonneparti VALUES (4, 2022, 10, 3, 3)''')
-	cursor.execute('''INSERT OR IGNORE INTO Bonneparti VALUES (5, 2022, 10, 3, 2)''')
-	cursor.execute('''INSERT OR IGNORE INTO Bonneparti VALUES (6, 2022, 10, 3, 1)''')
-	cursor.execute('''INSERT OR IGNORE INTO Bonneparti VALUES (7, 2022, 10, 2, 1)''')
+	cursor.execute('''INSERT OR IGNORE INTO Bonneparti VALUES (2, 2022, 10, 2, 2)''')
+	cursor.execute('''INSERT OR IGNORE INTO Bonneparti VALUES (3, 2022, 10, 3, 1)''')
+	cursor.execute('''INSERT OR IGNORE INTO Bonneparti VALUES (4, 2022, 10, 4, 2)''')
+	cursor.execute('''INSERT OR IGNORE INTO Bonneparti VALUES (5, 2022, 10, 5, 1)''')
+	cursor.execute('''INSERT OR IGNORE INTO Bonneparti VALUES (6, 2022, 10, 6, 2)''')
 
 	cursor.execute('''INSERT OR IGNORE INTO BonneFraGard VALUES (1, 1)''')
 	cursor.execute('''INSERT OR IGNORE INTO BonneFraGard VALUES (2, 1)''')
 
 	cursor.execute('''INSERT OR IGNORE INTO BonnerIParti VALUES (1, 1)''')
-	cursor.execute('''INSERT OR IGNORE INTO BonnerIParti VALUES (2, 1)''')
+	cursor.execute('''INSERT OR IGNORE INTO BonnerIParti VALUES (1, 2)''')
+	cursor.execute('''INSERT OR IGNORE INTO BonnerIParti VALUES (2, 2)''')
+	cursor.execute('''INSERT OR IGNORE INTO BonnerIParti VALUES (3, 1)''')
+	cursor.execute('''INSERT OR IGNORE INTO BonnerIParti VALUES (4, 2)''')
+	cursor.execute('''INSERT OR IGNORE INTO BonnerIParti VALUES (4, 1)''')
+	cursor.execute('''INSERT OR IGNORE INTO BonnerIParti VALUES (5, 1)''')
+	cursor.execute('''INSERT OR IGNORE INTO BonnerIParti VALUES (6, 2)''')
 
 	cursor.execute('''INSERT OR IGNORE INTO Bruker VALUES (1, 'logan_paal@epost.no', 'superweakpw123', 'Paal Markus Bjørnstad')''')
 	cursor.execute('''INSERT OR IGNORE INTO Bruker VALUES (2, 'torstein@epost.no', 'superbadpw123', 'Torstein Korten')''')
 	cursor.execute('''INSERT OR IGNORE INTO Bruker VALUES (3, 'odd@epost.no', 'superstrongpw123', 'Odd Magne Gynnild')''')
 
-	# Denne er feil
-	cursor.execute('''INSERT OR IGNORE INTO Foredlingsmetode VALUES (1, 'bourbon', 'Bærtørket')''')
-	cursor.execute('''INSERT OR IGNORE INTO Foredlingsmetode VALUES (2, 'magnifique', 'Vasket')''')
-	cursor.execute('''INSERT OR IGNORE INTO Foredlingsmetode VALUES (3, 'belle', 'Vasket')''')
-	cursor.execute('''INSERT OR IGNORE INTO Foredlingsmetode VALUES (4, 'Bærtørket', 'Naar man bærtørker saa faar kaffen en helt spesiell aroma')''')
-	cursor.execute('''INSERT OR IGNORE INTO Foredlingsmetode VALUES (5, 'Vasket', 'Denne kan gjøre at bønnen kan føles litt kjedelig ut')''')
-
-
-
+	cursor.execute('''INSERT OR IGNORE INTO Foredlingsmetode VALUES (1, 'Bærtørket', 'Naar man bærtørker saa faar kaffen en helt spesiell aroma')''')
+	cursor.execute('''INSERT OR IGNORE INTO Foredlingsmetode VALUES (2, 'Vasket', 'Denne kan gjøre at bønnen kan føles litt kjedelig ut')''')
 
 	cursor.execute('''INSERT OR IGNORE INTO Gard VALUES (1, 'Nombre de Dios', '1500', 'Colombia', 'Santa Ana')''')
 	cursor.execute('''INSERT OR IGNORE INTO Gard VALUES (2, 'Nombre de Trios', '1532', 'Colombia', 'Cúcuta')''')
 	cursor.execute('''INSERT OR IGNORE INTO Gard VALUES (3, 'Nombre de Quatros', '1545', 'Rwanda', 'Kigali')''')
 	cursor.execute('''INSERT OR IGNORE INTO Gard VALUES (4, 'Nombre de Cinco', '1689', 'Rwanda', 'Kigali')''')
+	cursor.execute('''INSERT OR IGNORE INTO Gard VALUES (5, 'Nombre de Seis', '1669', 'Wales', 'Kanto')''')
+	cursor.execute('''INSERT OR IGNORE INTO Gard VALUES (6, 'Nombre de Siete', '1337', 'Wales', 'Johto')''')
 
-	# cursor.execute('''INSERT OR IGNORE INTO Gard VALUES (4, 'Nombre de Dios', '1500', 'El Salvador', 'Santa Ana')''')
-
-
-	cursor.execute('''INSERT OR IGNORE INTO Kaffebonne VALUES (1, 'arabica', 'arabica')''')
-	cursor.execute('''INSERT OR IGNORE INTO Kaffebonne VALUES (2, 'brabonne', 'brabonneart')''')
+	cursor.execute('''INSERT OR IGNORE INTO Kaffebonne VALUES (1, 'coffea arabica', 'arabica')''')
+	cursor.execute('''INSERT OR IGNORE INTO Kaffebonne VALUES (2, 'coffea robusta', 'brabonneart')''')
 
 	cursor.execute('''INSERT OR IGNORE INTO Kaffebrenneri VALUES (1, 'Jacobsen & Svart')''')
 
@@ -84,6 +81,10 @@ def fill_database():
 	cursor.execute('''INSERT OR IGNORE INTO Kaffe VALUES (3, 'Sommerkaffe 2021', 'Kjempeflott', 200 , '2021-02-02', 'lys', 1, 2)''')
 	cursor.execute('''INSERT OR IGNORE INTO Kaffe VALUES (4, 'Sommerkaffe 2022', 'Kjempeflott floral i smaken', 200 , '2021-02-02', 'lys', 1, 2)''')
 	cursor.execute('''INSERT OR IGNORE INTO Kaffe VALUES (5, 'Sommerkaffe 2023', 'Kjempeflott', 200 , '2021-02-02', 'lys', 1, 2)''')
+	cursor.execute('''INSERT OR IGNORE INTO Kaffe VALUES (6, 'Sommerkaffe 2024', 'Kjempeflott', 200 , '2021-02-02', 'lys', 1, 3)''')
+	cursor.execute('''INSERT OR IGNORE INTO Kaffe VALUES (7, 'Sommerkaffe 2025', 'Kjempeflott', 200 , '2021-02-02', 'lys', 1, 4)''')
+	cursor.execute('''INSERT OR IGNORE INTO Kaffe VALUES (8, 'Sommerkaffe 2026', 'Kjempeflott', 200 , '2021-02-02', 'lys', 1, 5)''')
+	cursor.execute('''INSERT OR IGNORE INTO Kaffe VALUES (9, 'Sommerkaffe 2027', 'Kjempeflott', 200 , '2021-02-02', 'lys', 1, 6)''')
 
 	con.commit()
 	con.close()
@@ -215,7 +216,6 @@ Brukerhistirie 5: Søk etter kaffe fra land og med foredlingsmetode\n\n''')
 		print("Skriv inn nasjonene du vil finne kaffe fra. Skriv mellomrom mellom hvert land (Colombia Nigeria Peru): ", end="")
 		nasjoner = [str(nasjon) for nasjon in input().split()]
 		filter = input("Hvilken foredlingsmetode vil du \x1B[3mIKKE\x1B[0m se: ")
-		filter = "%" + filter + "%"
 		brukerhistori_input = [filter] + nasjoner
 		clear_terminal()
 		brukerhistorie_5(filter, nasjoner)

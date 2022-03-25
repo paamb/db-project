@@ -1,6 +1,13 @@
 import sqlite3
+from os import system, name
 
 DATABASE = "prosjekt_db_innlevering1.db"
+
+def clear_terminal():
+	if name == 'nt':
+		_ = system('cls')
+	else:
+		_ = system('clear')
 
 def clean_database():
 	con = sqlite3.connect(DATABASE)
@@ -121,16 +128,31 @@ def brukerhistorie_2():
 	Order by smakstester desc'''):
 		print(row)
 
+def brukerhistorie_3():
+	print("    Gjennomsnittspoeng    ||     Kaffenavn     ||     KiloprisNOK     ||     Brennerinavn     ")
+	print("==============================================================================================")
+	for row in cursor.execute('''SELECT AVG(Kaffesmaking.poeng) as avgPoeng, Kaffe.navn, Kaffe.kiloprisNOK, Kaffebrenneri.navn
+FROM Kaffesmaking INNER JOIN Kaffe on (Kaffesmaking.kaffeId = Kaffe.id)
+INNER JOIN Kaffebrenneri on (Kaffe.brenneriId = Kaffebrenneri.id)
+GROUP BY Kaffe.id
+ORDER BY (avgPoeng/Kaffe.kiloprisNOK) DESC'''):
+		print(f'  {row[0] : <25}{row[1] : <25}{row[2] : <25}{row[3] : <25}  ')
+
+
 # Brukerhistorie 4
 def brukerhistorie_4(filter):
-	for row in cursor.execute(f'''SELECT Kaffebrenneri.navn as brennerinavn, Kaffe.navn as kaffenavn, Kaffe.id
+
+	print("    Brennerinavn    ||     Kaffenavn     ")
+	print("=========================================")
+
+	for row in cursor.execute(f'''SELECT Kaffebrenneri.navn as brennerinavn, Kaffe.navn as kaffenavn
 	FROM Kaffe INNER JOIN Kaffebrenneri on(Kaffe.brenneriId = Kaffebrenneri.id)
 	WHERE Kaffe.beskrivelse like ( ? )
 	UNION
-	SELECT Kaffebrenneri.navn as brennrinavn, Kaffe.navn as kaffenavn, Kaffe.id
+	SELECT Kaffebrenneri.navn as brennrinavn, Kaffe.navn as kaffenavn
 	FROM Kaffesmaking INNER JOIN Kaffe on (Kaffesmaking.kaffeId = Kaffe.id) INNER JOIN Kaffebrenneri on (Kaffebrenneri.id = Kaffe.brenneriId)
 	WHERE Kaffesmaking.smaksnotat like ( ? )''', [filter, filter]):
-		print(row)
+		print(f'  {row[0] : <25}{row[1] : ^8}  ')
 
 	# brukerhistorie_4_output= cursor.fetchall()
 	# print(brukerhistorie_4_output)
@@ -143,6 +165,9 @@ def brukerhistorie_5(filter, nasjoner):
 	# print(nasjoner)
 	# Denne bruker f string men tror at ? gjør at det går fint
 	# https://stackoverflow.com/questions/283645/python-list-in-sql-query-as-parameter
+	print("    Brennerinavn    ||     Kaffenavn     ")
+	print("=========================================")
+
 	for row in cursor.execute(f'''SELECT  Kaffebrenneri.navn AS "brenninavn", Kaffe.navn AS "kaffenavn"
 	FROM Bonneparti INNER JOIN
 	(SELECT *
@@ -157,7 +182,7 @@ def brukerhistorie_5(filter, nasjoner):
 	INNER JOIN Kaffebrenneri on (Kaffe.brenneriId = Kaffebrenneri.id)
 	WHERE Gard.land IN ({','.join('?' for _ in brukerhistorie_input[1::])})
 	''', (brukerhistorie_input)):
-		print(row)
+		print(f'  {row[0] : <25}{row[1] : ^10}  ')
 
 
 
@@ -171,10 +196,12 @@ while True:
 		fill_database()
 	elif tabell == "t":
 		clean_database()
+	
+	clear_terminal()
 
 
 	brukerhistorie = int(input("Hvilken brukerhistorie vil du utføre? (1,2,3,4,5): "))
-	
+	clear_terminal()
 	if brukerhistorie == 1:
 		bruker = input("Skriv inn ditt brukernavn: ")
 		brukerhistorie_1(bruker)
@@ -183,25 +210,30 @@ while True:
 		brukerhistorie_2()
 
 	elif brukerhistorie == 3:
-		# brukerhistorie_3()
-		pass
+		brukerhistorie_3()
 
 	elif brukerhistorie == 4:
 		filter = input("Hvilket ord vil du filtrere på? (floral): ")
 		filter = "%" + filter + "%"
+		clear_terminal()
 		brukerhistorie_4(filter)
+		
 		
 	elif brukerhistorie == 5:
 		print("Skriv inn nasjonene du vil finne kaffe fra. Skriv mellomrom mellom hvert land (Colombia Nigeria Peru): ", end="")
 		nasjoner = [str(nasjon) for nasjon in input().split()]
 		filter = input("Hvilken foredlingsmetode vil du \x1B[3mIKKE\x1B[0m se: ")
-		#filter = "%" + filter + "%"
-		brukerhistorie_input = [filter] + nasjoner
+		brukerhistori_input = [filter] + nasjoner
+		clear_terminal()
 		brukerhistorie_5(filter, nasjoner)
+		
 	elif brukerhistorie == 10:
 		clean_database()
 	else:
 		print("Ugyldig input. Skriv inn et tall mellom 1 og 5")
+	
+	input("\n\n\n\nTrykk ENTER for å gå videre")
+	clear_terminal()
 	con.commit()
 	# Close connection
 	con.close()

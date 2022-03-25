@@ -113,28 +113,44 @@ def fill_database():
 # Brukerhistorie 1
 def brukerhistorie_1(bruker):
 	clean_database()
+	print("Databasen tømmes automatisk på brukerhistorie 1.")
 	print("Du er logget inn som: " + bruker + "\nLegg til et smaksnotat! \n")
 	brenneri = input("Brenneri: ")
 	kaffenavn = input("Kaffenavn: ")
 	poeng = input("Poeng (0-10): ")
 	smaksnotat = input("Smaksnotat: ")
+	smaksdato = input("Smaksdato (yyyy-dd-mm): ")
 
 	con = sqlite3.connect(DATABASE)
 	cursor = con.cursor()
 
-	#Oppretter gård og kaffebønn
+	#Oppretter gård og kaffebønne
 	cursor.execute('''INSERT OR IGNORE INTO Gard VALUES (1, 'Nombre de Dios', '1500', 'Colombia', 'Santa Ana')''')
 	cursor.execute('''INSERT OR IGNORE INTO Kaffebonne VALUES (1, 'Bourbon', 'caffea arabica')''')
 	cursor.execute('''INSERT OR IGNORE INTO BonneFraGard VALUES (1, 1)''')
 
-	#Lager foredingsmetode og kaffebønne
+	#Lager foredingsmetode og bønneparti
 	cursor.execute('''INSERT OR IGNORE INTO Foredlingsmetode VALUES (1, 'Bærtørket', 'Disse bønnene er bærtørket.')''')
 	cursor.execute('''INSERT OR IGNORE INTO Bonneparti VALUES (1, 2022, 8, 1, 1)''')
 	cursor.execute('''INSERT OR IGNORE INTO BonnerIParti VALUES (1, 1)''')
 
 	#Lager kaffebrenneri og kaffe
-	cursor.execute('''INSERT OR IGNORE INTO Kaffebrenneri VALUES (1, 'Jacobsen & Svart')''')
-	cursor.execute('''INSERT OR IGNORE INTO Kaffe VALUES (1, 'Vinterkaffe 2022', 'Ingen beskrivelse', 600 , '2022-20-01', 'lys', 1, 1)''')
+	cursor.execute(f'''INSERT OR IGNORE INTO Kaffebrenneri VALUES (1, '{brenneri}')''')
+	cursor.execute(f'''INSERT OR IGNORE INTO Kaffe VALUES (1, '{kaffenavn}', 'Ingen beskrivelse', 600 , '2022-20-01', 'lys', 1, 1)''')
+
+	#Lager Bruker og Kaffesmaking
+	cursor.execute(f'''INSERT OR IGNORE INTO Bruker VALUES (1, 'bruker@brukersen', 'passord123', '{bruker}')''')
+	cursor.execute(f'''INSERT OR IGNORE INTO Kaffesmaking VALUES (1, '{smaksnotat}', '{poeng}', '{smaksdato}', 1, 1)''')
+
+	con.commit()
+
+	print("\nSmaksnotater med tilhørende kaffe (smaksnotat | kaffe): \n")
+	for row in cursor.execute('''SELECT smaksnotat, navn
+		FROM Kaffesmaking INNER JOIN Kaffe ON Kaffesmaking.kaffeId = Kaffe.id'''):
+		print(f'''{row[0]} | {row[1]} \n''')
+	print("Dersom kaffesmakingen ikke ble lagt til er noen av inputverdiene feil.")
+
+	
 
 
 

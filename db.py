@@ -195,6 +195,7 @@ Brukerhistorie 3: Se hvilken kaffe som gir mest for pengene
 Brukerhistorie 4: Søk etter kaffe med beskrivelse
 Brukerhistirie 5: Søk etter kaffe fra land og med foredlingsmetode\n\n''')
 	brukerhistorie = int(input("Hvilken brukerhistorie vil du utføre? (1,2,3,4,5): "))
+	clear_terminal()
 	if brukerhistorie == 1:
 		bruker = input("Skriv inn ditt brukernavn: ")
 		brukerhistorie_1(bruker)
@@ -224,6 +225,7 @@ Brukerhistirie 5: Søk etter kaffe fra land og med foredlingsmetode\n\n''')
 		clean_database()
 	else:
 		print("Ugyldig input. Skriv inn et tall mellom 1 og 5")
+	input("\n\n\n\nTrykk ENTER for å gå videre")
 
 while True:
 	con = sqlite3.connect(DATABASE)
@@ -239,10 +241,6 @@ while True:
 
 	velg_brukerhistorie()
 
-	clear_terminal()
-	
-	
-	input("\n\n\n\nTrykk ENTER for å gå videre")
 	clear_terminal()
 	con.commit()
 	# Close connection

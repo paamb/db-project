@@ -134,6 +134,8 @@ def brukerhistorie_1(bruker):
 
 # Brukerhistorie 2
 def brukerhistorie_2():
+	print("    Fullt navn    ||     Antall smakstester    ")
+	print("===============================================")
 	for row in cursor.execute('''SELECT fulltNavn, count(*) as smakstester
 	FROM (
 	SELECT DISTINCT fulltNavn, kaffeId 
@@ -141,7 +143,7 @@ def brukerhistorie_2():
 	)
 	Group by fulltNavn
 	Order by smakstester desc'''):
-		print(row)
+		print(f'  {row[0] : <30}{row[1] : <30}  ')
 
 def brukerhistorie_3():
 	print("    Gjennomsnittspoeng    ||     Kaffenavn     ||     KiloprisNOK     ||     Brennerinavn     ")
@@ -199,22 +201,14 @@ def brukerhistorie_5(filter, nasjoner):
 	''', (brukerhistorie_input)):
 		print(f'  {row[0] : <25}{row[1] : ^10}  ')
 
-
-
-while True:
-	con = sqlite3.connect(DATABASE)
-	cursor = con.cursor()
-	
-	tabell = input("Vil du fylle tabellene eller tømme de (t/f/ ): ")
-	
-	if tabell == "f":
-		fill_database()
-	elif tabell == "t":
-		clean_database()
-	
-	clear_terminal()
-
-
+def velg_brukerhistorie():
+	print('''VELG BRUKERHISTORIE\n
+===================================
+Brukerhistorie 1: Registrer en kaffesmaking
+Brukerhistorie 2: Finn brukere med flest smakinger
+Brukerhistorie 3: Se hvilken kaffe som gir mest for pengene
+Brukerhistorie 4: Søk etter kaffe med beskrivelse
+Brukerhistirie 5: Søk etter kaffe fra land og med foredlingsmetode\n\n''')
 	brukerhistorie = int(input("Hvilken brukerhistorie vil du utføre? (1,2,3,4,5): "))
 	clear_terminal()
 	if brukerhistorie == 1:
@@ -246,8 +240,22 @@ while True:
 		clean_database()
 	else:
 		print("Ugyldig input. Skriv inn et tall mellom 1 og 5")
-	
 	input("\n\n\n\nTrykk ENTER for å gå videre")
+
+while True:
+	con = sqlite3.connect(DATABASE)
+	cursor = con.cursor()
+	
+	tabell = input("Vil du fylle tabellene eller tømme de (t/f/ ): ")
+	if tabell == "f":
+		fill_database()
+	elif tabell == "t":
+		clean_database()
+	
+	clear_terminal()
+
+	velg_brukerhistorie()
+
 	clear_terminal()
 	con.commit()
 	# Close connection

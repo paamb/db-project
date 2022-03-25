@@ -285,5 +285,6 @@ def main():
 		clear_terminal()
 		velg_brukerhistorie()
 		clear_terminal()
+		clean_database()
 
 main()

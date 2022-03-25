@@ -92,6 +92,7 @@ def fill_database():
 # Brukerhistorie 1
 def brukerhistorie_1(bruker):
 	clean_database()
+	print("Databasen tømmes automatisk på brukerhistorie 1.")
 	print("Du er logget inn som: " + bruker + "\nLegg til et smaksnotat! \n")
 	brenneri = input("Brenneri: ")
 	kaffenavn = input("Kaffenavn: ")

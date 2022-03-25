@@ -14,6 +14,7 @@ def clean_database():
 	cursor = con.cursor()
 
 	cursor.execute('DELETE FROM BonneFraGard;',)
+	cursor.execute('DELETE FROM BonnerIParti',)
 	cursor.execute('DELETE FROM Bonneparti;',)
 	cursor.execute('DELETE FROM Bruker;',)
 	cursor.execute('DELETE FROM Foredlingsmetode;',)
@@ -68,8 +69,28 @@ def fill_database():
 	cursor.execute('''INSERT OR IGNORE INTO Kaffebonne VALUES (2, 'coffea robusta', 'brabonneart')''')
 
 	cursor.execute('''INSERT OR IGNORE INTO Kaffebrenneri VALUES (1, 'Jacobsen & Svart')''')
+<<<<<<< Updated upstream
 
 	cursor.execute('''INSERT OR IGNORE INTO Kaffesmaking VALUES (1, 'Veldig god kaffe', 10 ,'2022-02-02', 1, 1)''')
+=======
+	cursor.execute('''INSERT OR IGNORE INTO Kaffebrenneri VALUES (2, 'The Barn')''')
+	cursor.execute('''INSERT OR IGNORE INTO Kaffebrenneri VALUES (3, 'Coffee Supreme')''')
+
+	# Brennerid - Partiid
+	cursor.execute('''INSERT OR IGNORE INTO Kaffe VALUES (1, 'Høstkaffe 2019', 'Hint av aprikos', 100 , '2022-20-01', 'middels', 1, 1)''')
+	cursor.execute('''INSERT OR IGNORE INTO Kaffe VALUES (2, 'San Pedro', 'Smak av karamell', 500000 , '2022-01-01', 'mørk', 2, 2)''')
+	cursor.execute('''INSERT OR IGNORE INTO Kaffe VALUES (3, 'Sommerkaffe 2021', 'Kjempeflott', 200 , '2021-02-02', 'lys', 3, 2)''')
+	cursor.execute('''INSERT OR IGNORE INTO Kaffe VALUES (4, 'Sommerkaffe 2022', 'Floral i smaken', 200 , '2021-02-02', 'lys', 1, 2)''')
+	cursor.execute('''INSERT OR IGNORE INTO Kaffe VALUES (5, 'Sun Drop', 'Smak av appelsin og sjasmin', 200 , '2021-02-02', 'lys', 2, 2)''')
+	cursor.execute('''INSERT OR IGNORE INTO Kaffe VALUES (6, 'Boxer Blend', 'Fruktig og floral', 200 , '2021-02-02', 'lys', 3, 3)''')
+	cursor.execute('''INSERT OR IGNORE INTO Kaffe VALUES (7, 'Sommerkaffe 2020', 'Sommerlig', 200 , '2021-02-02', 'lys', 1, 4)''')
+	cursor.execute('''INSERT OR IGNORE INTO Kaffe VALUES (8, 'Our Plot Daterra', 'Vanilje og pære', 200 , '2021-02-02', 'lys', 2, 5)''')
+	cursor.execute('''INSERT OR IGNORE INTO Kaffe VALUES (9, 'Magnifique', 'Mørk', 200 , '2021-02-02', 'lys', 3, 6)''')
+
+
+	# Brukerid - Kaffeid
+	cursor.execute('''INSERT OR IGNORE INTO Kaffesmaking VALUES (1, 'Aprikosen i kaffen gjør denne veldig god', 10 ,'2022-02-02', 1, 1)''')
+>>>>>>> Stashed changes
 	cursor.execute('''INSERT OR IGNORE INTO Kaffesmaking VALUES (2, 'Wow – en odyssé for smaksløkene: sitrusskall, melkesjokolade, aprikos!', 10 ,'2022-03-02', 1, 2)''')
 	cursor.execute('''INSERT OR IGNORE INTO Kaffesmaking VALUES (3, 'Wow – en odyssé for smaksløkene: sitrusskall, melkesjokolade, aprikos!', 10 ,'2022-03-02', 2, 2)''')
 	cursor.execute('''INSERT OR IGNORE INTO Kaffesmaking VALUES (4, 'Wow – en odyssé for smaksløkene: sitrusskall, melkesjokolade, aprikos!', 10 ,'2022-03-02', 3, 2)''')

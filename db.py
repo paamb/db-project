@@ -69,10 +69,6 @@ def fill_database():
 	cursor.execute('''INSERT OR IGNORE INTO Kaffebonne VALUES (2, 'coffea robusta', 'brabonneart')''')
 
 	cursor.execute('''INSERT OR IGNORE INTO Kaffebrenneri VALUES (1, 'Jacobsen & Svart')''')
-<<<<<<< Updated upstream
-
-	cursor.execute('''INSERT OR IGNORE INTO Kaffesmaking VALUES (1, 'Veldig god kaffe', 10 ,'2022-02-02', 1, 1)''')
-=======
 	cursor.execute('''INSERT OR IGNORE INTO Kaffebrenneri VALUES (2, 'The Barn')''')
 	cursor.execute('''INSERT OR IGNORE INTO Kaffebrenneri VALUES (3, 'Coffee Supreme')''')
 
@@ -90,7 +86,6 @@ def fill_database():
 
 	# Brukerid - Kaffeid
 	cursor.execute('''INSERT OR IGNORE INTO Kaffesmaking VALUES (1, 'Aprikosen i kaffen gjør denne veldig god', 10 ,'2022-02-02', 1, 1)''')
->>>>>>> Stashed changes
 	cursor.execute('''INSERT OR IGNORE INTO Kaffesmaking VALUES (2, 'Wow – en odyssé for smaksløkene: sitrusskall, melkesjokolade, aprikos!', 10 ,'2022-03-02', 1, 2)''')
 	cursor.execute('''INSERT OR IGNORE INTO Kaffesmaking VALUES (3, 'Wow – en odyssé for smaksløkene: sitrusskall, melkesjokolade, aprikos!', 10 ,'2022-03-02', 2, 2)''')
 	cursor.execute('''INSERT OR IGNORE INTO Kaffesmaking VALUES (4, 'Wow – en odyssé for smaksløkene: sitrusskall, melkesjokolade, aprikos!', 10 ,'2022-03-02', 3, 2)''')

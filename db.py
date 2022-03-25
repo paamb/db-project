@@ -131,7 +131,7 @@ def brukerhistorie_1(epost):
 
 	#Lager kaffebrenneri og kaffe
 	cursor.execute(f'''INSERT OR IGNORE INTO Kaffebrenneri VALUES (1, ( ? ))''', [brenneri])
-	cursor.execute(f'''INSERT OR IGNORE INTO Kaffe VALUES (1, ( ? ), 'Ingen beskrivelse', 600 , '2022-20-01', 'lys', 1, 1)''', [kaffenavn])
+	cursor.execute(f'''INSERT OR IGNORE INTO Kaffe VALUES (1, ( ? ), 'Ingen beskrivelse', 600 , '2022-01-20', 'lys', 1, 1)''', [kaffenavn])
 
 	#Lager Bruker og Kaffesmaking
 	cursor.execute(f'''INSERT OR IGNORE INTO Bruker VALUES (1, ( ? ), 'passord123', 'Bruker Brukersen')''', [epost])
@@ -139,8 +139,7 @@ def brukerhistorie_1(epost):
 
 	con.commit()
 	clear_terminal()
-	print("\nSmaksnotater med tilhørende kaffe (smaksnotat | kaffe): \n")
-	print("    Smaksnotat    ||     Navn    ")
+	print("    Smaksnotat    ||     Kaffenavn    ")
 	print("==================================")
 	for row in cursor.execute('''SELECT smaksnotat, navn
 		FROM Kaffesmaking INNER JOIN Kaffe ON Kaffesmaking.kaffeId = Kaffe.id'''):
@@ -159,7 +158,7 @@ def brukerhistorie_2():
 	for row in cursor.execute(
 		'''SELECT fulltNavn, count(*) as smakstester
 		FROM (
-			SELECT DISTINCT fulltNavn, kaffeId 
+			SELECT DISTINCT Bruker.id, fulltNavn, kaffeId 
 			FROM Bruker INNER JOIN Kaffesmaking ON Bruker.id = Kaffesmaking.brukerId
 			WHERE date('now','start of year') <= date(Kaffesmaking.smaksdato)
 		)
@@ -197,12 +196,11 @@ def brukerhistorie_4(filter):
 
 	for row in cursor.execute(f'''
 		SELECT Kaffebrenneri.navn as brennerinavn, Kaffe.navn as kaffenavn
-		FROM Kaffe INNER JOIN Kaffebrenneri on(Kaffe.brenneriId = Kaffebrenneri.id)
-		WHERE Kaffe.beskrivelse like ( ? )
-		UNION
-		SELECT Kaffebrenneri.navn as brennrinavn, Kaffe.navn as kaffenavn
-		FROM Kaffesmaking INNER JOIN Kaffe on (Kaffesmaking.kaffeId = Kaffe.id) INNER JOIN Kaffebrenneri on (Kaffebrenneri.id = Kaffe.brenneriId)
-		WHERE Kaffesmaking.smaksnotat like ( ? )''', [filter, filter]):
+		FROM Kaffe 
+		INNER JOIN Kaffebrenneri on (Kaffe.brenneriId = Kaffebrenneri.id) 
+		INNER JOIN Kaffesmaking on (Kaffesmaking.kaffeId = Kaffe.id)
+		WHERE Kaffe.beskrivelse like ( ? ) OR Kaffesmaking.smaksnotat like ( ? )
+		''', [filter, filter]):
 		print(f'  {row[0] : <25}{row[1] : ^8}  ')
 
 	con.commit()

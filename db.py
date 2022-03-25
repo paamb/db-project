@@ -195,7 +195,7 @@ def brukerhistorie_4(filter):
 	print("=========================================")
 
 	for row in cursor.execute(f'''
-		SELECT Kaffebrenneri.navn as brennerinavn, Kaffe.navn as kaffenavn
+		SELECT DISTINCT Kaffebrenneri.navn as brennerinavn, Kaffe.navn as kaffenavn
 		FROM Kaffe 
 		INNER JOIN Kaffebrenneri on (Kaffe.brenneriId = Kaffebrenneri.id) 
 		INNER JOIN Kaffesmaking on (Kaffesmaking.kaffeId = Kaffe.id)
@@ -216,7 +216,7 @@ def brukerhistorie_5(filter, nasjoner):
 	print("=========================================")
 
 	for row in cursor.execute(f'''
-		SELECT  Kaffebrenneri.navn AS "brenninavn", Kaffe.navn AS "kaffenavn"
+		SELECT DISTINCT Kaffebrenneri.navn AS "brenninavn", Kaffe.navn AS "kaffenavn"
 		FROM Bonneparti INNER JOIN
 		(SELECT *
 		FROM Foredlingsmetode

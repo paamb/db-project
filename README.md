@@ -1,3 +1,3 @@
-# db-project
+# db-project in course TDT4145
 
-Terminalbased Database project written in python with sqllite
+Terminalbased database project written in python with sqllite
